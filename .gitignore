@@ -11,8 +11,11 @@ deploy
 debug
 /mbed/src/Debug/
 /mbed/src/Release/
-/LPC1768/
 /mbed/drop/
+/mbed_stm/src/Debug/
+/mbed_stm/src/Release/
+/mbed_stm/drop/
+/LPC1768/
 /gcc-arm-none-eabi/
 /BuildShell
 /BuildShellDebug

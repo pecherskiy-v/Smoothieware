@@ -1,0 +1,192 @@
+###############################################################################
+# Objects and Paths
+
+#OBJECTS += main.o
+OBJECTS += cmsis/TARGET_CORTEX_M/mbed_tz_context.o
+
+#CAPI
+OBJECTS += capi/internal/mbed_atomic_impl.o
+
+OBJECTS += capi/mpu/mbed_mpu_v7m.o
+
+OBJECTS += capi/TARGET_CORTEX_M/TOOLCHAIN_GCC/except.o
+OBJECTS += capi/TARGET_CORTEX_M/mbed_fault_handler.o
+
+OBJECTS += capi/CThunkBase.o
+OBJECTS += capi/CallChain.o
+OBJECTS += capi/mbed_critical_section_api.o
+OBJECTS += capi/mbed_gpio.o
+OBJECTS += capi/mbed_pinmap_common.o
+OBJECTS += capi/mbed_pinmap_default.o
+OBJECTS += capi/mbed_ticker_api.o
+OBJECTS += capi/mbed_us_ticker_api.o
+OBJECTS += capi/mbed_application.o
+OBJECTS += capi/mbed_assert.o
+OBJECTS += capi/mbed_critical.o
+OBJECTS += capi/mbed_error.o
+OBJECTS += capi/mbed_error_hist.o
+OBJECTS += capi/mbed_interface.o
+OBJECTS += capi/mbed_mpu_mgmt.o
+OBJECTS += capi/mbed_poll.o
+OBJECTS += capi/mbed_retarget.o
+OBJECTS += capi/mbed_rtc_time.o
+OBJECTS += capi/mbed_semihost_api.o
+OBJECTS += capi/mbed_stats.o
+OBJECTS += capi/mbed_wait_api_no_rtos.o
+OBJECTS += capi/mbed_mktime.o
+
+#CPP
+OBJECTS += cpp/AnalogIn.o
+OBJECTS += cpp/BusIn.o
+OBJECTS += cpp/BusInOut.o
+OBJECTS += cpp/BusOut.o
+OBJECTS += cpp/CAN.o
+OBJECTS += cpp/Ethernet.o
+OBJECTS += cpp/I2C.o
+OBJECTS += cpp/I2CSlave.o
+OBJECTS += cpp/InterruptIn.o
+OBJECTS += cpp/InterruptManager.o
+OBJECTS += cpp/QSPI.o
+OBJECTS += cpp/SPI.o
+OBJECTS += cpp/SPISlave.o
+OBJECTS += cpp/Serial.o
+OBJECTS += cpp/SerialBase.o
+OBJECTS += cpp/Ticker.o
+OBJECTS += cpp/Timeout.o
+OBJECTS += cpp/Timer.o
+OBJECTS += cpp/TimerEvent.o
+OBJECTS += cpp/UARTSerial.o
+OBJECTS += cpp/Watchdog.o
+OBJECTS += cpp/FileBase.o
+OBJECTS += cpp/FileHandle.o
+OBJECTS += cpp/FilePath.o
+OBJECTS += cpp/FileSystemHandle.o
+OBJECTS += cpp/LocalFileSystem.o
+OBJECTS += cpp/Stream.o
+
+#Vendor STM
+OBJECTS += vendor/STM/analogin_api.o
+OBJECTS += vendor/STM/analogout_api.o
+OBJECTS += vendor/STM/can_api.o
+OBJECTS += vendor/STM/gpio_api.o
+OBJECTS += vendor/STM/gpio_irq_api.o
+OBJECTS += vendor/STM/hal_tick_overrides.o
+OBJECTS += vendor/STM/i2c_api.o
+OBJECTS += vendor/STM/lp_ticker.o
+OBJECTS += vendor/STM/mbed_crc_api.o
+OBJECTS += vendor/STM/mbed_overrides.o
+OBJECTS += vendor/STM/pinmap.o
+OBJECTS += vendor/STM/port_api.o
+OBJECTS += vendor/STM/pwmout_api.o
+OBJECTS += vendor/STM/qspi_api.o
+OBJECTS += vendor/STM/reset_reason.o
+OBJECTS += vendor/STM/rtc_api.o
+OBJECTS += vendor/STM/serial_api.o
+OBJECTS += vendor/STM/sleep.o
+OBJECTS += vendor/STM/stm_spi_api.o
+OBJECTS += vendor/STM/trng_api.o
+OBJECTS += vendor/STM/us_ticker.o
+OBJECTS += vendor/STM/watchdog_api.o
+
+#STM32F4 famali
+OBJECTS += vendor/STM/STM32F4/analogin_device.o
+OBJECTS += vendor/STM/STM32F4/analogout_device.o
+OBJECTS += vendor/STM/STM32F4/flash_api.o
+OBJECTS += vendor/STM/STM32F4/gpio_irq_device.o
+OBJECTS += vendor/STM/STM32F4/pwmout_device.o
+OBJECTS += vendor/STM/STM32F4/serial_device.o
+OBJECTS += vendor/STM/STM32F4/spi_api.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_adc.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_adc_ex.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_can.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_can_legacy.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_cec.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_cortex.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_crc.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_cryp.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_cryp_ex.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_dac.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_dac_ex.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_dcmi.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_dcmi_ex.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_dfsdm.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_dma.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_dma2d.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_dma_ex.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_dsi.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_eth.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_flash.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_flash_ex.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_flash_ramfunc.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_fmpi2c.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_fmpi2c_ex.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_gpio.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_hash.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_hash_ex.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_hcd.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_i2c.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_i2c_ex.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_i2s.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_i2s_ex.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_irda.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_iwdg.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_lptim.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_ltdc.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_ltdc_ex.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_mmc.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_nand.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_nor.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_pccard.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_pcd.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_pcd_ex.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_pwr.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_pwr_ex.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_qspi.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_rcc.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_rcc_ex.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_rng.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_rtc.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_rtc_ex.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_sai.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_sai_ex.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_sd.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_sdram.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_smartcard.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_spdifrx.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_spi.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_sram.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_tim.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_tim_ex.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_uart.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_usart.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_hal_wwdg.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_ll_adc.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_ll_crc.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_ll_dac.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_ll_dma.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_ll_dma2d.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_ll_exti.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_ll_fmc.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_ll_fsmc.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_ll_gpio.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_ll_i2c.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_ll_lptim.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_ll_pwr.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_ll_rcc.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_ll_rng.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_ll_rtc.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_ll_sdmmc.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_ll_spi.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_ll_tim.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_ll_usart.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_ll_usb.o
+OBJECTS += vendor/STM/STM32F4/device/stm32f4xx_ll_utils.o
+OBJECTS += vendor/STM/STM32F4/device/system_stm32f4xx.o
+
+#STM32F407xG device
+OBJECTS += vendor/STM/STM32F4/STM32F407xG/device/TOOLCHAIN_GCC_ARM/startup_stm32f407xx.o
+
+#PLATFORM BIGTREETECH SKR PRO
+OBJECTS += vendor/STM/STM32F4/STM32F407xG/BIGTREETECH_SKR_PRO/PeripheralPins.o
+OBJECTS += vendor/STM/STM32F4/STM32F407xG/BIGTREETECH_SKR_PRO/system_clock.o
