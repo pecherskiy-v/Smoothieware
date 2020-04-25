@@ -663,7 +663,7 @@ void SimpleShell::version_command( string parameters, StreamOutput *stream)
     #endif
     stream->printf("%d axis\n", MAX_ROBOT_ACTUATORS);
     if(!(dev & 0x00100000)) {
-        stream->printf("WARNING: This is not a sanctioned board and may be unreliable and even dangerous.\nThis MCU is deprecated, and cannot guarantee proper function\n");
+        stream->printf("NOTICE: This MCU is deprecated, and cannot guarantee proper function\n");
         THEKERNEL->set_bad_mcu(true);
     }else{
         THEKERNEL->set_bad_mcu(false);
@@ -761,12 +761,12 @@ void SimpleShell::grblDP_command( string parameters, StreamOutput *stream)
         THEROBOT->from_millimeters(std::get<2>(v[n+1])));
 
     if(verbose) {
-        stream->printf("[Tool Offset:%1.4f,%1.4f,%1.4f]\n",
+        stream->printf("[TLO:%1.4f,%1.4f,%1.4f]\n",
             THEROBOT->from_millimeters(std::get<0>(v[n+2])),
             THEROBOT->from_millimeters(std::get<1>(v[n+2])),
             THEROBOT->from_millimeters(std::get<2>(v[n+2])));
     }else{
-        stream->printf("[TL0:%1.4f]\n", THEROBOT->from_millimeters(std::get<2>(v[n+2])));
+        stream->printf("[TLO:%1.4f]\n", THEROBOT->from_millimeters(std::get<2>(v[n+2])));
     }
 
     // this is the last probe position, updated when a probe completes, also stores the number of steps moved after a homing cycle
@@ -869,8 +869,8 @@ void SimpleShell::get_command( string parameters, StreamOutput *stream)
 
     } else if (what == "state") {
         // also $G and $I
-        // [G0 G54 G17 G21 G90 G94 M0 M5 M9 T0 F0.]
-        stream->printf("[G%d %s G%d G%d G%d G94 M0 M%c M%c T%d F%1.4f S%1.4f]\n",
+        // [GC:G0 G54 G17 G21 G90 G94 M0 M5 M9 T0 F0.]
+        stream->printf("[GC:G%d %s G%d G%d G%d G94 M0 M%c M%c T%d F%1.4f S%1.4f]\n",
             THEKERNEL->gcode_dispatch->get_modal_command(),
             wcs2gcode(THEROBOT->get_current_wcs()).c_str(),
             THEROBOT->plane_axis_0 == X_AXIS && THEROBOT->plane_axis_1 == Y_AXIS && THEROBOT->plane_axis_2 == Z_AXIS ? 17 :
@@ -1031,6 +1031,11 @@ void SimpleShell::md5sum_command( string parameters, StreamOutput *stream )
 // runs several types of test on the mechanisms
 void SimpleShell::test_command( string parameters, StreamOutput *stream)
 {
+    if(!THECONVEYOR->is_idle()) {
+        stream->printf("error: tests are not allowed while printing or busy\n");
+        return;
+    }
+
     AutoPushPop app; // this will save the state and restore it on exit
     string what = shift_parameter( parameters );
 
@@ -1143,8 +1148,8 @@ void SimpleShell::test_command( string parameters, StreamOutput *stream)
          }
         stream->printf("done\n");
 
-    }else if (what == "raw") {
-        // issues raw steps to the specified axis usage: axis steps steps/sec
+    }else if (what == "raw" || what == "acc") {
+        // issues raw steps (or actuator units) to the specified axis usage: axis steps steps/sec
         string axis = shift_parameter( parameters );
         string stepstr = shift_parameter( parameters );
         string stepspersec = shift_parameter( parameters );
@@ -1156,7 +1161,7 @@ void SimpleShell::test_command( string parameters, StreamOutput *stream)
         char ax= toupper(axis[0]);
         uint8_t a= ax >= 'X' ? ax - 'X' : ax - 'A' + 3;
         int steps= strtol(stepstr.c_str(), NULL, 10);
-        bool dir= steps >= 0;
+        bool dir= steps <= 0;
         steps= std::abs(steps);
 
         if(a > C_AXIS) {
@@ -1170,6 +1175,13 @@ void SimpleShell::test_command( string parameters, StreamOutput *stream)
         }
 
         uint32_t sps= strtol(stepspersec.c_str(), NULL, 10);
+
+        if(what == "acc") {
+            // convert actuator units to steps
+            steps= lroundf(THEROBOT->actuators[a]->get_steps_per_mm() * steps);
+            // convert steps per unit to steps/sec
+            sps= lroundf(THEROBOT->actuators[a]->get_steps_per_mm() * sps);
+        }
         sps= std::max(sps, 1UL);
 
         uint32_t delayus= 1000000.0F / sps;
@@ -1185,11 +1197,57 @@ void SimpleShell::test_command( string parameters, StreamOutput *stream)
 
         //stream->printf("done\n");
 
+    }else if (what == "pulse") {
+        // issues a step pulse then waits then unsteps, for testing when stepper moves
+        string axis = shift_parameter( parameters );
+        string reps = shift_parameter( parameters );
+        if(axis.empty()) {
+            stream->printf("error: Need axis [iterations]\n");
+            return;
+        }
+
+        char ax= toupper(axis[0]);
+        uint8_t a= ax >= 'X' ? ax - 'X' : ax - 'A' + 3;
+
+        if(a > C_AXIS) {
+            stream->printf("error: axis must be x, y, z, a, b, c\n");
+            return;
+        }
+
+        if(a >= THEROBOT->get_number_registered_motors()) {
+            stream->printf("error: axis is out of range\n");
+            return;
+        }
+
+        int nreps= 1;
+        if(!reps.empty()) {
+            nreps= strtol(reps.c_str(), NULL, 10);
+        }
+
+        uint32_t delayms= 5000.0F; // step every five seconds
+        for(int s= 0;s<nreps;s++) {
+            if(THEKERNEL->is_halted()) break;
+            stream->printf("// leading edge\n");
+            THEROBOT->actuators[a]->step();
+            safe_delay_ms(delayms);
+            stream->printf("// trailing edge\n");
+            THEROBOT->actuators[a]->unstep();
+            if(THEKERNEL->is_halted()) break;
+            safe_delay_ms(delayms);
+        }
+
+        // reset the position based on current actuator position
+        THEROBOT->reset_position_from_current_actuator_position();
+
+        stream->printf("done\n");
+
     }else {
         stream->printf("usage:\n test jog axis distance iterations [feedrate]\n");
         stream->printf(" test square size iterations [feedrate]\n");
         stream->printf(" test circle radius iterations [feedrate]\n");
         stream->printf(" test raw axis steps steps/sec\n");
+        stream->printf(" test acc axis units units/sec\n");
+        stream->printf(" test pulse axis iterations\n");
     }
 }
 
@@ -1282,7 +1340,6 @@ void SimpleShell::help_command( string parameters, StreamOutput *stream )
     stream->printf("reset - reset smoothie\r\n");
     stream->printf("dfu - enter dfu boot loader\r\n");
     stream->printf("break - break into debugger\r\n");
-    stream->printf("config-get [<configuration_source>] <configuration_setting>\r\n");
     stream->printf("config-set [<configuration_source>] <configuration_setting> <value>\r\n");
     stream->printf("get [pos|wcs|state|status|fk|ik]\r\n");
     stream->printf("get temp [bed|hotend]\r\n");
